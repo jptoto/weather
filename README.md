@@ -2,14 +2,6 @@
 
 Weather via the command line. ~~Uses the [forecast.io](http://forecast.io) API so it's super accurate. Also includes any current weather alerts in the output.~~
 
-## Installation
-
-#### Via Go
-
-#```bash
-#$ go get github.com/jfrazelle/weather
-#```
-
 ## Usage
 
 - **`--location, -l`:** Your address, can be in the format of just a zipcode or a city, state, or the full address. **defaults to auto locating you based off your ip**
