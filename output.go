@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/mitchellh/colorstring"
 )
 
@@ -100,7 +101,7 @@ func printCurrentWeather(forecast Forecast, geolocation GeoLocation, ignoreAlert
 		fmt.Println(icon)
 	}
 
-	location := colorstring.Color(fmt.Sprintf("[green]%s in %s", geolocation.City, geolocation.Region))
+	location := colorstring.Color(fmt.Sprintf("[green]in %s", geolocation.DisplayName))
 	fmt.Printf("\nCurrent weather is %s in %s for %s\n", colorstring.Color("[cyan]"+forecast.Currently.Summary), location, colorstring.Color("[cyan]"+epochFormat(forecast.Currently.Time)))
 
 	temp := colorstring.Color(fmt.Sprintf("[magenta]%v%s", forecast.Currently.Temperature, unitsFormat.Degrees))

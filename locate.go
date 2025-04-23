@@ -6,44 +6,59 @@ import (
 	"net/http"
 )
 
-// response from www.telize.com/geoip
-// comes back like:
-// {
-//     timezone: "America/New_York",
-//     isp: "Road Runner HoldCo LLC",
-//     region_code: "NY",
-//     country: "United States",
-//     dma_code: "0",
-//     area_code: "0",
-//     region: "New York",
-//     ip: "74.71.83.142",
-//     asn: "AS11351",
-//     continent_code: "NA",
-//     city: "New York",
-//     postal_code: "10128",
-//     longitude: -73.9512,
-//     latitude: 40.7805,
-//     country_code: "US",
-//     country_code3: "USA"
-// }
+// response from https://geocode.maps.co
+// comes back in an array ordered by "importance". Probably safe to take the first one:
+// [
+//   {
+//     "place_id": 318254891,
+//     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+//     "osm_type": "node",
+//     "osm_id": 158623191,
+//     "boundingbox": [
+//       "40.0248306",
+//       "40.0648306",
+//       "-75.4588053",
+//       "-75.4188053"
+//     ],
+//     "lat": "40.0448306",
+//     "lon": "-75.4388053",
+//     "display_name": "Berwyn, Easttown Township, Chester County, Pennsylvania, 19312, United States",
+//     "class": "place",
+//     "type": "village",
+//     "importance": 0.469575729943735
+//   },
+//   {
+//     "place_id": 318253942,
+//     "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+//     "osm_type": "node",
+//     "osm_id": 2058688121,
+//     "boundingbox": [
+//       "40.0430849",
+//       "40.0530849",
+//       "-75.4475098",
+//       "-75.4375098"
+//     ],
+//     "lat": "40.0480849",
+//     "lon": "-75.4425098",
+//     "display_name": "Berwyn, East Lancaster Avenue, Berwyn, Easttown Township, Chester County, Pennsylvania, 19301, United States",
+//     "class": "railway",
+//     "type": "station",
+//     "importance": 0.2419138440405379
+//   }
+// ]
 
 type GeoLocation struct {
-	AreaCode      string  `json:"area_code"`
-	Asn           string  `json:"asn"`
-	City          string  `json:"city"`
-	ContinentCode string  `json:"continent_code"`
-	Country       string  `json:"country"`
-	CountryCode   string  `json:"country_code"`
-	CountryCode3  string  `json:"country_code3"`
-	DMACode       string  `json:"dma_code"`
-	Ip            string  `json:"ip"`
-	Isp           string  `json:"isp"`
-	Latitude      float64 `json:"latitude"`
-	Longitude     float64 `json:"longitude"`
-	PostalCode    string  `json:"postal_code"`
-	Region        string  `json:"region"`
-	RegionCode    string  `json:"region_code"`
-	Timezone      string  `json:"timezone"`
+	PlaceId     string   `json:"place_id"`
+	License     string   `json:"license"`
+	OsmType     string   `json:"osm_type"`
+	OsmId       string   `json:"osm_id"`
+	BoundingBox []string `json:"boundingbox"`
+	Latitude    float64  `json:"lat"`
+	Longitude   float64  `json:"lon"`
+	DisplayName string   `json:"display_name"`
+	Class       string   `json:"class"`
+	Type        string   `json:"type"`
+	Importance  float64  `json:"importance"`
 }
 
 func requestLocation(req *http.Request) (geolocation GeoLocation, err error) {
@@ -51,7 +66,7 @@ func requestLocation(req *http.Request) (geolocation GeoLocation, err error) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return geolocation, fmt.Errorf("Http request to %s failed: %s", req.URL, err.Error())
+		return geolocation, fmt.Errorf("http request to %s failed: %s", req.URL, err.Error())
 	}
 	defer resp.Body.Close()
 
@@ -61,7 +76,7 @@ func requestLocation(req *http.Request) (geolocation GeoLocation, err error) {
 	resp.Body.Close()
 
 	if err != nil {
-		return geolocation, fmt.Errorf("Decoding the response from %s failed: %s", req.URL, err)
+		return geolocation, fmt.Errorf("decoding the response from %s failed: %s", req.URL, err)
 	}
 
 	return geolocation, nil
