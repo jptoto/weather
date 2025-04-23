@@ -1,27 +1,14 @@
 # weather
 
-Weather via the command line. Uses the [forecast.io](http://forecast.io) API so it's super accurate. Also includes any current weather alerts in the output.
-
-![Screenshot](screenshot.png)
+Weather via the command line. ~~Uses the [forecast.io](http://forecast.io) API so it's super accurate. Also includes any current weather alerts in the output.~~
 
 ## Installation
 
 #### Via Go
 
-```bash
-$ go get github.com/jfrazelle/weather
-```
-
-#### Binaries
-
-- **darwin** [386](https://jesss.s3.amazonaws.com/weather/binaries/darwin/386/weather) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/darwin/amd64/weather)
-- **freebsd** [386](https://jesss.s3.amazonaws.com/weather/binaries/freebsd/386/weather) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/freebsd/amd64/weather) / [arm](https://jesss.s3.amazonaws.com/weather/binaries/freebsd/arm/weather)
-- **linux** [386](https://jesss.s3.amazonaws.com/weather/binaries/linux/386/weather) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/linux/amd64/weather) / [arm](https://jesss.s3.amazonaws.com/weather/binaries/linux/arm/weather)
-- **netbsd** [386](https://jesss.s3.amazonaws.com/weather/binaries/netbsd/386/weather) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/netbsd/amd64/weather) / [arm](https://jesss.s3.amazonaws.com/weather/binaries/netbsd/arm/weather)
-- **openbsd** [386](https://jesss.s3.amazonaws.com/weather/binaries/openbsd/386/weather) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/openbsd/amd64/weather)
-- **plan9** [386](https://jesss.s3.amazonaws.com/weather/binaries/plan9/386/weather)
-- **windows** [386](https://jesss.s3.amazonaws.com/weather/binaries/windows/386/weather.exe) / [amd64](https://jesss.s3.amazonaws.com/weather/binaries/windows/amd64/weather.exe)
-
+#```bash
+#$ go get github.com/jfrazelle/weather
+#```
 
 ## Usage
 
@@ -120,4 +107,3 @@ $ weather -l "Manhattan Beach, CA"
 # The pressure is 1012.99 mbar
 ```
 
-[![Analytics](https://ga-beacon.appspot.com/UA-29404280-16/weather/README.md)](https://github.com/jfrazelle/weather)
