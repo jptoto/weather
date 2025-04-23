@@ -1,5 +1,7 @@
 # weather
 
+(This is an old golang project from [@jessfraz](https://github.com/jessfraz) and I hope she doesn't mind that I'm borrowing it. It's since been removed from her profile so I couldn't fork it. I'm learning Golang and I also love weather. This codebase used the old DarkSky API and an IP geo locater that are no longer functional. I'll be doing a [restomod](https://www.velocityrestorations.com/blog/what-is-a-restomod/) on the code to get it working again as a golang learning project.)
+
 Weather via the command line. ~~Uses the [forecast.io](http://forecast.io) API so it's super accurate. Also includes any current weather alerts in the output.~~
 
 ## Usage
