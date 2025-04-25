@@ -7,8 +7,8 @@ import (
 )
 
 type ForecastRequest struct {
-	Latitude  float64  `json:"lat"`
-	Longitude float64  `json:"lng"`
+	Latitude  string   `json:"lat"`
+	Longitude string   `json:"lng"`
 	Units     string   `json:"units"`
 	Exclude   []string `json:"exclude"`
 }
