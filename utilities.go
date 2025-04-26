@@ -20,7 +20,7 @@ func createRequest(uri, method string, data interface{}) (req *http.Request, err
 		return req, fmt.Errorf("Marshaling JSON for %s to %s failed: %s", method, uri, err.Error())
 	}
 
-	// send the request
+	// create the request
 	req, err = http.NewRequest("POST", uri, bytes.NewReader(jsonByte))
 	if err != nil {
 		return req, fmt.Errorf("Creating the %s request to %s failed: %s", method, uri, err.Error())
