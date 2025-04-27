@@ -246,68 +246,97 @@ import (
 // }
 
 type Forecast struct {
-	Alerts    []Alert       `json:"alerts"`
-	Currently Weather       `json:"currently"`
-	Code      int           `json:"code"`
-	Daily     TimeDelimited `json:"daily"`
-	Error     string        `json:"error"`
-	Flags     Flags         `json:"flags"`
-	Hourly    TimeDelimited `json:"hourly"`
-	Latitude  float64       `json:"latitude"`
-	Longitude float64       `json:"longitude"`
-	Offset    int           `json:"offset"`
-	Timezone  string        `json:"timezone"`
+	Alerts    []Alerts        `json:"alerts"`
+	Currently CurrentWeather  `json:"currently"`
+	Hourly    []HourlyWeather `json:"hourly"`
+	Daily     DailyWeather    `json:"daily"`
+	Latitude  float64         `json:"lat"`
+	Longitude float64         `json:"lon"`
+	Offset    int             `json:"timezone_offset"`
+	Timezone  string          `json:"timezone"`
 }
 
-type Alert struct {
+type CurrentWeather struct {
+	Dt          int64       `json:"dt"`
+	Sunrise     int64       `json:"sunrise"`
+	Sunset      int64       `json:"sunset"`
+	Temperature float64     `json:"temp"`
+	FeelsLike   float64     `json:"feels_like"`
+	Pressure    int         `json:"pressure"`
+	Humidity    int         `json:"humidity"`
+	DewPoint    float64     `json:"dew_point"`
+	Uvi         float64     `json:"uvi"`
+	Clouds      int         `json:"clouds"`
+	Visibility  int         `json:"visibility"`
+	WindSpeed   float64     `json:"wind_speed"`
+	WindDegree  int         `json:"wind_deg"`
+	Info        WeatherInfo `json:"weather"`
+}
+
+type DailyWeather struct {
+	Dt          int64   `json:"dt"`
+	Sunrise     int64   `json:"sunrise"`
+	Sunset      int64   `json:"sunset"`
+	Moonrise    int64   `json:"moonrise"`
+	Moonset     int64   `json:"moonset"`
+	MoonPhase   float64 `json:"moon_phase"`
+	Summary     string  `json:"summary"`
+	Temperature struct {
+		Day   float64 `json:"day"`
+		Min   float64 `json:"min"`
+		Max   float64 `json:"max"`
+		Night float64 `json:"night"`
+		Eve   float64 `json:"eve"`
+		Morn  float64 `json:"morn"`
+	}
+	FeelsLike struct {
+		Day   float64 `json:"day"`
+		Night float64 `json:"night"`
+		Eve   float64 `json:"eve"`
+		Morn  float64 `json:"morn"`
+	}
+	Pressure  int         `json:"pressure"`
+	Humidity  int         `json:"humidity"`
+	DewPoint  float64     `json:"dew_point"`
+	WindSpeed float64     `json:"wind_speed"`
+	WindDeg   int         `json:"wind_deg"`
+	WindGust  float64     `json:"wind_gust"`
+	Info      WeatherInfo `json:"weather"`
+	Clouds    int         `json:"clouds"`
+	Pop       float64     `json:"pop"`
+	Rain      float64     `json:"rain"`
+	Uvi       float64     `json:"uvi"`
+}
+
+type HourlyWeather struct {
+	Dt          int64       `json:"dt"`
+	Temperature float64     `json:"temp"`
+	FeelsLike   float64     `json:"feels_like"`
+	Pressure    int         `json:"pressure"`
+	Humidity    int         `json:"humidity"`
+	DewPoint    float64     `json:"dew_point"`
+	Uvi         float64     `json:"uvi"`
+	Clouds      int         `json:"clouds"`
+	Visibility  int         `json:"visibility"`
+	WindSpeed   float64     `json:"wind_speed"`
+	WindDegree  int         `json:"wind_deg"`
+	WindGust    float64     `json:"wind_gust"`
+	Info        WeatherInfo `json:"weather"`
+}
+
+type Alerts struct {
+	SenderName  string `json:"sender_name"`
+	Event       string `json:"event"`
+	Start       int64  `json:"start"`
+	End         int64  `json:"end"`
 	Description string `json:"description"`
-	Expires     int64  `json:"expires"`
-	Time        int64  `json:"time"`
-	Title       string `json:"title"`
-	Uri         string `json:"uri"`
 }
 
-type Flags struct {
-	Units string `json:"units"`
-}
-
-type Weather struct {
-	ApparentTemperature        float64 `json:"apparentTemperature"`
-	ApparentTemperatureMax     float64 `json:"apparentTemperatureMax"`
-	ApparentTemperatureMaxTime int64   `json:"apparentTemperatureMaxTime"`
-	ApparentTemperatureMin     float64 `json:"apparentTemperatureMin"`
-	ApparentTemperatureMinTime int64   `json:"apparentTemperatureMinTime"`
-	CloudCover                 float64 `json:"cloudCover"`
-	DewPoint                   float64 `json:"dewPoint"`
-	Humidity                   float64 `json:"humidity"`
-	Icon                       string  `json:"icon"`
-	NearestStormDistance       float64 `json:"nearestStormDistance"`
-	NearestStormBearing        float64 `json:"nearestStormBearing"`
-	Ozone                      float64 `json:"ozone"`
-	PrecipIntensity            float64 `json:"precipIntensity"`
-	PrecipIntensityMax         float64 `json:"precipIntensityMax"`
-	PrecipIntensityMaxTime     int64   `json:"precipIntensityMaxTime"`
-	PrecipProbability          float64 `json:"precipProbability"`
-	PrecipType                 string  `json:"precipType"`
-	Pressure                   float64 `json:"pressure"`
-	Summary                    string  `json:"summary"`
-	SunriseTime                int64   `json:"sunriseTime"`
-	SunsetTime                 int64   `json:"sunsetTime"`
-	Temperature                float64 `json:"temperature"`
-	TemperatureMax             float64 `json:"temperatureMax"`
-	TemperatureMaxTime         int64   `json:"temperatureMaxTime"`
-	TemperatureMin             float64 `json:"temperatureMin"`
-	TemperatureMinTime         int64   `json:"temperatureMinTime"`
-	Time                       int64   `json:"time"`
-	Visibility                 float64 `json:"visibility"`
-	WindBearing                float64 `json:"windBearing"`
-	WindSpeed                  float64 `json:"windSpeed"`
-}
-
-type TimeDelimited struct {
-	Data    []Weather `json:"data"`
-	Icon    string    `json:"icon"`
-	Summary string    `json:"summary"`
+type WeatherInfo struct {
+	Id          int    `json:"id"`
+	Main        string `json:"main"`
+	Description string `json:"description"`
+	Icon        string `json:"icon"`
 }
 
 func getForecast(data ForecastRequest) (forecast Forecast, err error) {
