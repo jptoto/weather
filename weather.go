@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 // Example return data from https://openweathermap.org/api/one-call-3
@@ -249,7 +250,7 @@ type Forecast struct {
 	Alerts    []Alerts        `json:"alerts"`
 	Currently CurrentWeather  `json:"currently"`
 	Hourly    []HourlyWeather `json:"hourly"`
-	Daily     DailyWeather    `json:"daily"`
+	Daily     []DailyWeather  `json:"daily"`
 	Latitude  float64         `json:"lat"`
 	Longitude float64         `json:"lon"`
 	Offset    int             `json:"timezone_offset"`
@@ -257,20 +258,20 @@ type Forecast struct {
 }
 
 type CurrentWeather struct {
-	Dt          int64       `json:"dt"`
-	Sunrise     int64       `json:"sunrise"`
-	Sunset      int64       `json:"sunset"`
-	Temperature float64     `json:"temp"`
-	FeelsLike   float64     `json:"feels_like"`
-	Pressure    int         `json:"pressure"`
-	Humidity    int         `json:"humidity"`
-	DewPoint    float64     `json:"dew_point"`
-	Uvi         float64     `json:"uvi"`
-	Clouds      int         `json:"clouds"`
-	Visibility  int         `json:"visibility"`
-	WindSpeed   float64     `json:"wind_speed"`
-	WindDegree  int         `json:"wind_deg"`
-	Info        WeatherInfo `json:"weather"`
+	Dt          int64         `json:"dt"`
+	Sunrise     int64         `json:"sunrise"`
+	Sunset      int64         `json:"sunset"`
+	Temperature float64       `json:"temp"`
+	FeelsLike   float64       `json:"feels_like"`
+	Pressure    int           `json:"pressure"`
+	Humidity    int           `json:"humidity"`
+	DewPoint    float64       `json:"dew_point"`
+	Uvi         float64       `json:"uvi"`
+	Clouds      int           `json:"clouds"`
+	Visibility  int           `json:"visibility"`
+	WindSpeed   float64       `json:"wind_speed"`
+	WindDegree  int           `json:"wind_deg"`
+	Info        []WeatherInfo `json:"weather"`
 }
 
 type DailyWeather struct {
@@ -295,33 +296,33 @@ type DailyWeather struct {
 		Eve   float64 `json:"eve"`
 		Morn  float64 `json:"morn"`
 	}
-	Pressure  int         `json:"pressure"`
-	Humidity  int         `json:"humidity"`
-	DewPoint  float64     `json:"dew_point"`
-	WindSpeed float64     `json:"wind_speed"`
-	WindDeg   int         `json:"wind_deg"`
-	WindGust  float64     `json:"wind_gust"`
-	Info      WeatherInfo `json:"weather"`
-	Clouds    int         `json:"clouds"`
-	Pop       float64     `json:"pop"`
-	Rain      float64     `json:"rain"`
-	Uvi       float64     `json:"uvi"`
+	Pressure  int           `json:"pressure"`
+	Humidity  int           `json:"humidity"`
+	DewPoint  float64       `json:"dew_point"`
+	WindSpeed float64       `json:"wind_speed"`
+	WindDeg   int           `json:"wind_deg"`
+	WindGust  float64       `json:"wind_gust"`
+	Info      []WeatherInfo `json:"weather"`
+	Clouds    int           `json:"clouds"`
+	Pop       float64       `json:"pop"`
+	Rain      float64       `json:"rain"`
+	Uvi       float64       `json:"uvi"`
 }
 
 type HourlyWeather struct {
-	Dt          int64       `json:"dt"`
-	Temperature float64     `json:"temp"`
-	FeelsLike   float64     `json:"feels_like"`
-	Pressure    int         `json:"pressure"`
-	Humidity    int         `json:"humidity"`
-	DewPoint    float64     `json:"dew_point"`
-	Uvi         float64     `json:"uvi"`
-	Clouds      int         `json:"clouds"`
-	Visibility  int         `json:"visibility"`
-	WindSpeed   float64     `json:"wind_speed"`
-	WindDegree  int         `json:"wind_deg"`
-	WindGust    float64     `json:"wind_gust"`
-	Info        WeatherInfo `json:"weather"`
+	Dt          int64         `json:"dt"`
+	Temperature float64       `json:"temp"`
+	FeelsLike   float64       `json:"feels_like"`
+	Pressure    int           `json:"pressure"`
+	Humidity    int           `json:"humidity"`
+	DewPoint    float64       `json:"dew_point"`
+	Uvi         float64       `json:"uvi"`
+	Clouds      int           `json:"clouds"`
+	Visibility  int           `json:"visibility"`
+	WindSpeed   float64       `json:"wind_speed"`
+	WindDegree  int           `json:"wind_deg"`
+	WindGust    float64       `json:"wind_gust"`
+	Info        []WeatherInfo `json:"weather"`
 }
 
 type Alerts struct {
@@ -341,16 +342,16 @@ type WeatherInfo struct {
 
 func getForecast(data ForecastRequest) (forecast Forecast, err error) {
 	client := &http.Client{}
-	uri := "https://geocode.jessfraz.com/forecast"
+	uri := "https://api.openweathermap.org/data/3.0/onecall?lat=" + data.Latitude + "&lon=" + data.Longitude + "&appid=" + os.Getenv("OPENWEATHERMAP_API_KEY")
 
-	req, err := createRequest(uri, "POST", data)
+	req, err := http.NewRequest("GET", uri, nil)
+	resp, err := client.Do(req)
 	if err != nil {
 		return forecast, err
 	}
 
-	resp, err := client.Do(req)
 	if err != nil {
-		return forecast, fmt.Errorf("Http request to %s failed: %s", req.URL, err.Error())
+		return forecast, fmt.Errorf("http request to %s failed: %s", req.URL, err.Error())
 	}
 	defer resp.Body.Close()
 
@@ -360,11 +361,7 @@ func getForecast(data ForecastRequest) (forecast Forecast, err error) {
 	resp.Body.Close()
 
 	if err != nil {
-		return forecast, fmt.Errorf("Decoding the response from %s failed: %s", req.URL, err)
-	}
-
-	if forecast.Error != "" {
-		return forecast, fmt.Errorf("The response returned: %s", forecast.Error)
+		return forecast, fmt.Errorf("decoding the response from %s failed: %s", req.URL, err)
 	}
 
 	return forecast, nil

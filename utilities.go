@@ -1,8 +1,6 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"math"
@@ -12,23 +10,6 @@ import (
 
 	"github.com/mitchellh/colorstring"
 )
-
-func createRequest(uri, method string, data interface{}) (req *http.Request, err error) {
-	// create json data
-	jsonByte, err := json.Marshal(data)
-	if err != nil {
-		return req, fmt.Errorf("Marshaling JSON for %s to %s failed: %s", method, uri, err.Error())
-	}
-
-	// create the request
-	req, err = http.NewRequest("POST", uri, bytes.NewReader(jsonByte))
-	if err != nil {
-		return req, fmt.Errorf("Creating the %s request to %s failed: %s", method, uri, err.Error())
-	}
-	req.Header.Set("Content-Type", "application/json")
-
-	return req, nil
-}
 
 func epochFormat(seconds int64) string {
 	epochTime := time.Unix(0, seconds*int64(time.Second))

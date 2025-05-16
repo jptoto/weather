@@ -58,7 +58,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	printCurrentWeather(forecast, geolocation, ignoreAlerts)
+	printCurrentWeather(forecast, geolocation, ignoreAlerts, data)
 
 	if days > 1 {
 		printDailyWeather(forecast, days)

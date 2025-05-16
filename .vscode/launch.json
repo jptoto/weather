@@ -23,7 +23,7 @@
             "program": "${fileDirname}",
             "args": [
                 "-l",
-                ""
+                "Berwyn+PA"
             ]
         }
     ]
